@@ -1,0 +1,11 @@
+from fastapi import FastAPI
+from app.routes import auth, tasks
+
+app = FastAPI(title="TaskFlow API")
+
+app.include_router(auth.router, prefix="/auth", tags=["Auth"])
+app.include_router(tasks.router, prefix="/tasks", tags=["Tasks"])
+
+@app.get("/")
+def root():
+    return {"message": "TaskFlow Backend is running"}
