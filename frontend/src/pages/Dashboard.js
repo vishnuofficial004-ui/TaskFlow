@@ -1,40 +1,36 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
-import { logout } from "../utils/auth";
-import { useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
+import TaskForm from "../components/TaskForm";
+import TaskList from "../components/TaskList";
 
 export default function Dashboard() {
   const [user, setUser] = useState(null);
-  const navigate = useNavigate();
+  const [tasks, setTasks] = useState([]);
+
+  const fetchProfile = async () => {
+    const res = await api.get("/auth/me");
+    setUser(res.data);
+  };
+
+  const fetchTasks = async () => {
+    const res = await api.get("/tasks");
+    setTasks(res.data);
+  };
 
   useEffect(() => {
-    api.get("/auth/me")
-      .then(res => setUser(res.data))
-      .catch(() => {
-        logout();
-        navigate("/login");
-      });
-  }, [navigate]);
+    fetchProfile();
+    fetchTasks();
+  }, []);
 
   return (
-    <div className="container">
-      <h2>Dashboard</h2>
-
-      {user ? (
-        <>
-          <p><strong>Name:</strong> {user.name}</p>
-          <p><strong>Email:</strong> {user.email}</p>
-
-          <button onClick={() => {
-            logout();
-            navigate("/login");
-          }}>
-            Logout
-          </button>
-        </>
-      ) : (
-        <p>Loading...</p>
-      )}
-    </div>
+    <>
+      <Navbar user={user} />
+      <div className="container">
+        <h2>Dashboard</h2>
+        <TaskForm onTaskCreated={fetchTasks} />
+        <TaskList tasks={tasks} onChange={fetchTasks} />
+      </div>
+    </>
   );
 }
