@@ -76,7 +76,8 @@ TaskFlow/
         ├── components/
         ├── services/
         └── utils/
-<\pre>
+</pre>
+  
 ## **Consideration**
 Modular and scalable for production.
 Backend & frontend are clearly separated.
