@@ -61,6 +61,7 @@ It features a secure backend, a clean frontend, and a dashboard for CRUD operati
 5. Logout securely using the Logout button.
 
 Project Structure
+<pre>
 TaskFlow/
 ├── backend/
 │   └── app/
@@ -75,7 +76,7 @@ TaskFlow/
         ├── components/
         ├── services/
         └── utils/
-
+<\pre>
 ## **Consideration**
 Modular and scalable for production.
 Backend & frontend are clearly separated.
