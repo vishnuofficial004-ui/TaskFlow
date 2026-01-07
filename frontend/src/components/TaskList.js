@@ -1,7 +1,6 @@
 import api from "../services/api";
 
 export default function TaskList({ tasks, onChange }) {
-
   const toggleStatus = async (task) => {
     await api.put(`/tasks/${task.id}`, {
       status: task.status === "pending" ? "completed" : "pending"
@@ -10,39 +9,32 @@ export default function TaskList({ tasks, onChange }) {
   };
 
   const deleteTask = async (id) => {
+  try {
     await api.delete(`/tasks/${id}`);
     onChange();
-  };
+  } catch {
+    alert("Failed to delete task");
+  }
+};
+
 
   return (
-    <div>
-      <h3>Your Tasks</h3>
-
+    <ul>
       {tasks.map((task) => (
-        <div
-          key={task.id}
-          style={{
-            border: "1px solid #ccc",
-            padding: "10px",
-            marginBottom: "10px"
-          }}
-        >
-          <h4>{task.title}</h4>
-          <p>{task.description}</p>
-          <p>Status: {task.status}</p>
+        <li key={task.id} style={{ marginBottom: "10px" }}>
+          <strong>{task.title}</strong> – {task.status}
+          <br />
+          {task.description}
 
+          <br />
           <button onClick={() => toggleStatus(task)}>
-            Mark {task.status === "pending" ? "Completed" : "Pending"}
+            Toggle Status
           </button>
-
-          <button
-            onClick={() => deleteTask(task.id)}
-            style={{ marginLeft: "10px" }}
-          >
+          <button onClick={() => deleteTask(task.id)}>
             Delete
           </button>
-        </div>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }
